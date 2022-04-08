@@ -1,177 +1,109 @@
 import * as React from "react"
+import ButtonAppBar from "../components/AppBar/AppBar";
+import {Avatar, Button, Card, TextField} from "@mui/material";
 
-// styles
-const pageStyles = {
-  color: "#232129",
-  padding: 96,
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
-const headingAccentStyles = {
-  color: "#663399",
-}
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
-const listStyles = {
-  marginBottom: 96,
-  paddingLeft: 0,
-}
-const listItemStyles = {
-  fontWeight: 300,
-  fontSize: 24,
-  maxWidth: 560,
-  marginBottom: 30,
-}
+const IndexPage: React.FC = (): React.ReactElement => {
+  const pageStyles = {
+    color: "#232129",
+    fontFamily: "-apple-system, Roboto, sans-serif, serif",
+    height: '100vh',
+    margin: 0,
+    padding: 0
+  }
 
-const linkStyle = {
-  color: "#8954A8",
-  fontWeight: "bold",
-  fontSize: 16,
-  verticalAlign: "5%",
-}
+  let [upvote1, setUpvote1] = React.useState(0);
+  let [downvote1, setDownvote1] = React.useState(0);
 
-const docLinkStyle = {
-  ...linkStyle,
-  listStyleType: "none",
-  marginBottom: 24,
-}
+    let [upvote2, setUpvote2] = React.useState(0);
+    let [downvote2, setDownvote2] = React.useState(0);
 
-const descriptionStyle = {
-  color: "#232129",
-  fontSize: 14,
-  marginTop: 10,
-  marginBottom: 0,
-  lineHeight: 1.25,
-}
 
-const docLink = {
-  text: "TypeScript Documentation",
-  url: "https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/",
-  color: "#8954A8",
-}
+    function stringToColor(string) {
+        let hash = 0;
+        let i;
 
-const badgeStyle = {
-  color: "#fff",
-  backgroundColor: "#088413",
-  border: "1px solid #088413",
-  fontSize: 11,
-  fontWeight: "bold",
-  letterSpacing: 1,
-  borderRadius: 4,
-  padding: "4px 6px",
-  display: "inline-block",
-  position: "relative" as "relative",
-  top: -2,
-  marginLeft: 10,
-  lineHeight: 1,
-}
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+            hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        }
 
-// data
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial/",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-    color: "#E95800",
-  },
-  {
-    text: "How to Guides",
-    url: "https://www.gatsbyjs.com/docs/how-to/",
-    description:
-      "Practical step-by-step guides to help you achieve a specific goal. Most useful when you're trying to get something done.",
-    color: "#1099A8",
-  },
-  {
-    text: "Reference Guides",
-    url: "https://www.gatsbyjs.com/docs/reference/",
-    description:
-      "Nitty-gritty technical descriptions of how Gatsby works. Most useful when you need detailed information about Gatsby's APIs.",
-    color: "#BC027F",
-  },
-  {
-    text: "Conceptual Guides",
-    url: "https://www.gatsbyjs.com/docs/conceptual/",
-    description:
-      "Big-picture explanations of higher-level Gatsby concepts. Most useful for building understanding of a particular topic.",
-    color: "#0D96F2",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-    color: "#8EB814",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    badge: true,
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-    color: "#663399",
-  },
-]
+        let color = '#';
 
-// markup
-const IndexPage = () => {
+        for (i = 0; i < 3; i += 1) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += `00${value.toString(16)}`.slice(-2);
+        }
+        /* eslint-enable no-bitwise */
+
+        return color;
+    }
+
+    function stringAvatar(name) {
+        return {
+            sx: {
+                bgcolor: stringToColor(name),
+            },
+            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        };
+    }
+
   return (
     <main style={pageStyles}>
-      <title>Home Page</title>
-      <h1 style={headingStyles}>
-        Congratulations
-        <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! </span>
-        🎉🎉🎉
-      </h1>
-      <p style={paragraphStyles}>
-        Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this page
-        update in real-time. 😎
-      </p>
-      <ul style={listStyles}>
-        <li style={docLinkStyle}>
-          <a
-            style={linkStyle}
-            href={`${docLink.url}?utm_source=starter&utm_medium=ts-docs&utm_campaign=minimal-starter-ts`}
-          >
-            {docLink.text}
-          </a>
-        </li>
-        {links.map(link => (
-          <li key={link.url} style={{ ...listItemStyles, color: link.color }}>
-            <span>
-              <a
-                style={linkStyle}
-                href={`${link.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter-ts`}
-              >
-                {link.text}
-              </a>
-              {link.badge && (
-                <span style={badgeStyle} aria-label="New Badge">
-                  NEW!
-                </span>
-              )}
-              <p style={descriptionStyle}>{link.description}</p>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <img
-        alt="Gatsby G Logo"
-        src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
+      <div style={{ height: '50px', border: '1px solid #212129', borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row'}}>
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginLeft: '20px'}}>
+          <path d="M0 18C0 25.7075 4.82115 32.2731 11.6247 34.8423V1.15771C4.82115 3.72688 0 10.2925 0 18Z" fill="#DC1928"/>
+          <path d="M18 0C17.5083 0 17.0009 0.015859 16.5251 0.0475771V1.3163H16.6202C23.4713 1.36388 28.9903 6.59736 28.9427 13.0044C28.8951 19.3797 23.3445 24.5181 16.5251 24.5022V35.9366C17.0167 35.9841 17.5083 36 18 36C27.9436 36 36 27.9436 36 18C36 8.05639 27.9436 0 18 0Z" fill="#DC1928"/>
+        </svg>
+        <div style={{ marginLeft: '12px'}}>Bug Bounty</div>
+        </div>
+        <div style={{ marginRight: '20px'}}>John Doe</div>
+      </div>
+      <TextField
+          id="filled-search"
+          label="Search for an accessibility issue"
+          type="search"
+          variant="standard"
+          style={{ width: '500px', marginTop: '20px', marginLeft: '20px', marginBottom: '40px'}}
       />
+
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Avatar {...stringAvatar('Ken Doe')} style={{marginLeft: '20px' }}/>
+            <div style={{ marginLeft: '20px'}}>Ken Doe</div>
+        </div>
+        <Card variant="outlined" style={{ width: '500px', margin: '20px 0 20px 50px'}}><div style={{ padding: '20px'}}>Australia Post shop does not have a wheelchair ramp. I can't access my services! >:(</div></Card>
+        <div style={{ marginLeft: '50px', marginBottom: '30px', display: 'flex', alignItems: 'center'}}>
+            <Button variant="contained" color="success" onClick={() => setUpvote1(upvote1 + 1)}>
+                Upvote
+            </Button>
+
+            <div style={{ marginLeft: '12px', marginRight: '12px', color: 'green' }}>+ {upvote1}</div>
+
+            <Button variant="contained" color="error" style={{ width: '100px', marginLeft: '12px'}} onClick={() => setDownvote1(downvote1 + 1)}>
+                Downvote
+            </Button>
+
+            <div style={{ marginLeft: '12px', marginRight: '12px', color: 'red' }}>- {downvote1}</div>
+        </div>
+
+
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <Avatar {...stringAvatar('John Woe')} style={{marginLeft: '20px' }}/>
+            <div style={{ marginLeft: '20px'}}>John Woe</div>
+        </div>
+        <Card variant="outlined" style={{ width: '500px', margin: '20px 0 20px 50px'}}><div style={{ padding: '20px'}}>The Australia Post shop is hard to see, colours are too plain and as someone who has visual impairment, I am struggling to navigate through the website.</div></Card>
+
+        <div style={{ marginLeft: '50px', marginBottom: '30px', display: 'flex', alignItems: 'center'}}>
+            <Button variant="contained" color="success" onClick={() => setUpvote2(upvote2 + 1)}>
+                Upvote
+            </Button>
+            <div style={{ marginLeft: '12px', marginRight: '12px', color: 'green' }}>+ {upvote2}</div>
+
+            <Button variant="contained" color="error" style={{ width: '100px', marginLeft: '12px'}} onClick={() => setDownvote2(downvote2 + 1)}>
+                Downvote
+            </Button>
+            <div style={{ marginLeft: '12px', marginRight: '12px', color: 'red' }}>- {downvote2}</div>
+        </div>
     </main>
   )
 }
